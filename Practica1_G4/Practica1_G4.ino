@@ -27,9 +27,9 @@ int estadoDip1 = 0;  // Estado en que se encuentra el dipswitch
 int estadoDip2 = 0;  // Estado en que se encuentra el dipswitch
 
 
-String mensajeTexto = "*P1 - GRUPO # 4 - SECCION A*";  // Texto a mostrar en la matriz
+String mensajeTexto = "*P1 - GRUPO # 4 - SECCION A*";  // Texto estatico a mostrar en la matriz
 
-String mensajeTextoD = "Dinamico";
+String mensajeTextoD = "Dinamico";  //Texto Dinamico a mostrar en la matriz
 
 int velocidadTexto = 50; //velocidad texto
 int pausavel = 300;                   
