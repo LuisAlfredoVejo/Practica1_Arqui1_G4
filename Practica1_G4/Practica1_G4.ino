@@ -29,7 +29,7 @@ int estadoDip2 = 0;  // Estado en que se encuentra el dipswitch
 
 String mensajeTexto = "*P1 - GRUPO # 4 - SECCION A*";  // Texto estatico a mostrar en la matriz
 
-String mensajeTextoD = "Dinamico";  //Texto Dinamico a mostrar en la matriz
+String mensajeTextoD = "Mensaje Dinamico";  //Texto Dinamico a mostrar en la matriz
 
 int velocidadTexto = 50; //velocidad texto
 int pausavel = 300;                   
@@ -212,7 +212,7 @@ void contadorPulsacion() {
         // modo letrero preciono 3 segundos cambio a
         if (estadoGeneral == 0) {
             estadoGeneral = 1;  // modo dinamico 
-            Serial.println("Se cambio al modo dinamico");
+            Serial.println("Se cambio al modo mensaje dinamico");
         } else if (estadoGeneral == 1) {            
             estadoGeneral = 0;  // modo mensaje estatico
             Serial.println("Regresando al modo mensaje estatico");            
