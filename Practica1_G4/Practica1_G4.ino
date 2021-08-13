@@ -29,7 +29,9 @@ int estadoDip2 = 0;  // Estado en que se encuentra el dipswitch
 
 String mensajeTexto = "*P1 - GRUPO # 4 - SECCION A*";  // Texto estatico a mostrar en la matriz
 
-String mensajeTextoD = "Mensaje Dinamico";  //Texto Dinamico a mostrar en la matriz
+String mensajeTextoD = "";  //Texto Dinamico a mostrar en la matriz
+
+bool verificar = true;
 
 int velocidadTexto = 300; //velocidad texto
 int pausavel = 300;                   
@@ -190,14 +192,32 @@ void configuracionPantantalla() {
 void loop() {
   // put your main code here, to run repeatedly:
   metodoPot(); 
+  
   if (estadoGeneral == 0) {
         //texto estatico
         mensajeTextoAPP();
-    } else if (estadoGeneral == 1) {
+    } else if (estadoGeneral == 1){
         //texto dinamico
-        mensajeTextoDAPP();
-    }
+        obtencionTexto();
+        }
     contadorPulsacion();
+}
+
+//Metodo para capturar mensaje
+void obtencionTexto(){
+  if(mensajeTextoD == ""){
+    while(Serial.available()> 0 && verificar){
+      if(Serial.available()> 0){
+        String texto = Serial.readString();
+        mensajeTextoD = mensajeTextoD + texto;
+        Serial.println(mensajeTextoD);
+        verificar = false;
+      }
+    }      
+  } 
+  else{
+    mensajeTextoDAPP();
+    } 
 }
 
 // funcion que cuenta tiempo de pulsacion
@@ -375,31 +395,31 @@ void funcVelocidadTD() {
 void funcEfectoTextoD() {
     if (estadoDip1 == LOW && estadoDip2 == LOW) {
         efectoTxt = PA_SCROLL_LEFT;
-        posTxtD = PA_LEFT;
+        posTxt = PA_LEFT;
         P.setTextEffect(efectoTxt, efectoTxt);
-        if (bLimpiarMatrizD == false) {
-            bLimpiarMatrizD = true;
+        if (bLimpiarMatriz == false) {
+            bLimpiarMatriz = true;
             P.displayClear();
         }
     } else if (estadoDip1 == LOW && estadoDip2 == HIGH) {
         efectoTxt = PA_SCROLL_RIGHT;
-        posTxtD = PA_RIGHT;
+        posTxt = PA_RIGHT;
         P.setTextEffect(efectoTxt, efectoTxt);
-        if (bLimpiarMatrizD == true) {
-            bLimpiarMatrizD = false;
+        if (bLimpiarMatriz == true) {
+            bLimpiarMatriz = false;
             P.displayClear();
         }
     } else if (estadoDip1 == HIGH) {
-        P.print(mensajeTextoD[indexMensajeTextoD]);
-        indexMensajeTextoD++;
-        if (indexMensajeTextoD == mensajeTextoD.length()) {
-            indexMensajeTextoD = 0;
+        P.print(mensajeTexto[indexMensajeTexto]);
+        indexMensajeTexto++;
+        if (indexMensajeTexto == mensajeTextoD.length()) {
+            indexMensajeTexto = 0;
         }
         delay(velocidadTexto);
         P.displayReset();
     }
     if (P.displayAnimate()) {
-        P.displayText(mensajeTextoD.c_str(), posTxtD, velocidadTexto, P.getPause(),
+        P.displayText(mensajeTextoD.c_str(), posTxt, velocidadTexto, P.getPause(),
                       efectoTxt, efectoTxt);
     }
 }
