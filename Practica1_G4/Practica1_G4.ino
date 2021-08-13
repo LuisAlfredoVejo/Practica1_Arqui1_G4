@@ -29,7 +29,7 @@ int estadoDip2 = 0;  // Estado en que se encuentra el dipswitch
 
 String mensajeTexto = "*P1 - GRUPO # 4 - SECCION A*";  // Texto estatico a mostrar en la matriz
 
-String mensajeTextoD = "";  //Texto Dinamico a mostrar en la matriz
+String mensajeTextoD = "Mensaje Dinamico";  //Texto Dinamico a mostrar en la matriz
 
 String data = "";
 
@@ -92,8 +92,9 @@ void setup() {
   // put your setup code here, to run once:
 
     Serial.begin(9600);
-    //Serial1.begin(9600);
+    pinMode(7, OUTPUT);
 
+    
     // Inicializando Parola
     configuracionParola();
 
@@ -101,7 +102,7 @@ void setup() {
     configuracionTimer();
 
     // Configuracion inicial de pantalla
-    configuracionPantantalla();
+    configuracionPantalla();
 
     //Inicializar Pines Digitales
     for(int i=0; i<8; i++){
@@ -138,28 +139,28 @@ void procesarPines(boolean arreglo[]){
   }
 
 void metodoPot(){
-int lectura_pot = analogRead(pinAnalogo);
-if(lectura_pot == 0){
-  procesarPines(cero);
-}
-else if(lectura_pot>0 && lectura_pot<=200){
-  procesarPines(uno);
+  int lectura_pot = analogRead(pinAnalogo);
+  if(lectura_pot == 0){
+    procesarPines(cero);
   }
-else if(lectura_pot>200 && lectura_pot<400){
-  procesarPines(dos);
-  }
-else if(lectura_pot>400 && lectura_pot<614){
-  procesarPines(tres);
-  }
-else if(lectura_pot>600 && lectura_pot<819){
-  procesarPines(cuatro);
-  }
-else if(lectura_pot>800 && lectura_pot<1023){
-  procesarPines(cinco);
-  }
+  else if(lectura_pot>0 && lectura_pot<=200){
+    procesarPines(uno);
+    }
+  else if(lectura_pot>200 && lectura_pot<400){
+    procesarPines(dos);
+    }
+  else if(lectura_pot>400 && lectura_pot<614){
+    procesarPines(tres);
+    }
+  else if(lectura_pot>600 && lectura_pot<819){
+    procesarPines(cuatro);
+    }
+  else if(lectura_pot>800 && lectura_pot<1023){
+    procesarPines(cinco);
+    }
 }
 
-// Metodo encargado de la configuracion inicial de la pantalla 
+
 void configuracionJoystick() {
     // configuracion de los pines de entrada
     pinMode(BTN_START, INPUT_PULLUP);
@@ -179,7 +180,7 @@ void cuentoPulsos(void) {
 }
 
 // Metodo encargado de la configuracion inicial de la pantalla 
-void configuracionPantantalla() {
+void configuracionPantalla() {
     // configuracion inicial de la pantalla 0
     controlador.shutdown(0, false);  // desactiva el ahorro de energia
     controlador.setIntensity(0, 8);  // establece el brillo
@@ -201,41 +202,28 @@ void loop() {
     } else if (estadoGeneral == 1){
         //texto dinamico
         obtencionTexto();
-        delay(100);
-        mensajeTextoDAPP();
+        //mensajeTextoDAPP();
         }
     contadorPulsacion();
 }
 
+//encender LED
+
+void led(){
+  digitalWrite(7, HIGH);
+  delay(1000);
+  digitalWrite(7, LOW);
+  delay(1000);
+  
+}
+
+
 //Metodo para capturar mensaje
+
 void obtencionTexto(){
-  if(Serial.available()){
-    String texto = Serial.readString();
-    mensajeTextoD = mensajeTextoD + texto;
-    Serial.println(mensajeTextoD);
-    //mensajeTextoD = "";
-  }
-  /*if(verificar){
-    while(Serial.available() && verificar){
-      
-      char character = Serial.read();
-      if (character != '\n')
-      {
-         mensajeTextoD = mensajeTextoD+ character;
-         
-      }
-      else
-      {
-         Serial.println(mensajeTextoD);
-         verificar=false;
-      }
-    } 
-    delay(200);     
-  } 
-  else{
-    mensajeTextoDAPP();
-    }
-    */
+          
+  
+    
 }
 
 // funcion que cuenta tiempo de pulsacion
@@ -250,10 +238,12 @@ void contadorPulsacion() {
         // modo letrero preciono 3 segundos cambio a
         if (estadoGeneral == 0) {
             estadoGeneral = 1;  // modo dinamico 
-            Serial.println("Se cambio al modo mensaje dinamico");
+            //Serial.println("Se cambio al modo mensaje dinamico, escriba: ");
+            led();
         } else if (estadoGeneral == 1) {            
             estadoGeneral = 0;  // modo mensaje estatico
-            Serial.println("Regresando al modo mensaje estatico");            
+            //Serial.println("Regresando al modo mensaje estatico");
+            led();            
         }
         contadorPulsos = 0;
     }
@@ -265,7 +255,6 @@ void contadorPulsacion() {
 void mensajeTextoAPP(void) {
     estadoDip1 = digitalRead(DIP1);
     estadoDip2 = digitalRead(DIP2);
-    
 
     funcEfectoTexto();
     funcVelocidad();
@@ -303,7 +292,7 @@ void funcVelocidad() {
     } 
 
      else if (lectura_pot>=600 && lectura_pot<=800){
-            P.setSpeed(75); // Aplicamos el cambio de velocidad
+            P.setSpeed(50); // Aplicamos el cambio de velocidad
             //Serial.print("Se cambio la velocidad del mensaje(ms): ");
             //Serial.println("4");
             // asm("jmp 0x0000"); //reiniciar arduino
@@ -354,10 +343,10 @@ void funcEfectoTexto() {
 // Ejecucion Mensaje de Texto Dinamico
 
 void mensajeTextoDAPP(void) {
+  
     estadoDip1 = digitalRead(DIP1);
     estadoDip2 = digitalRead(DIP2);
     
-
     funcEfectoTextoD();
     funcVelocidadTD();
     
@@ -394,7 +383,7 @@ void funcVelocidadTD() {
     } 
 
      else if (lectura_pot>=600 && lectura_pot<=800){
-            P.setSpeed(75); // Aplicamos el cambio de velocidad
+            P.setSpeed(50); // Aplicamos el cambio de velocidad
             //Serial.print("Se cambio la velocidad del mensaje(ms): ");
             //Serial.println("4");
             // asm("jmp 0x0000"); //reiniciar arduino
