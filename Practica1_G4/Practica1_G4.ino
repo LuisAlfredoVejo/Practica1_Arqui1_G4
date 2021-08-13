@@ -31,7 +31,7 @@ String mensajeTexto = "*P1 - GRUPO # 4 - SECCION A*";  // Texto estatico a mostr
 
 String mensajeTextoD = "Mensaje Dinamico";  //Texto Dinamico a mostrar en la matriz
 
-int velocidadTexto = 50; //velocidad texto
+int velocidadTexto = 300; //velocidad texto
 int pausavel = 300;                   
 int indexMensajeTexto = 0;            // Indice para la cadena de texto
 int indexMensajeTextoD = 0;            // Indice para la cadena de texto
