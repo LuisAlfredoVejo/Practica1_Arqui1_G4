@@ -31,6 +31,8 @@ String mensajeTexto = "*P1 - GRUPO # 4 - SECCION A*";  // Texto estatico a mostr
 
 String mensajeTextoD = "";  //Texto Dinamico a mostrar en la matriz
 
+String data = "";
+
 bool verificar = true;
 
 int velocidadTexto = 300; //velocidad texto
@@ -199,25 +201,41 @@ void loop() {
     } else if (estadoGeneral == 1){
         //texto dinamico
         obtencionTexto();
+        delay(100);
+        mensajeTextoDAPP();
         }
     contadorPulsacion();
 }
 
 //Metodo para capturar mensaje
 void obtencionTexto(){
-  if(mensajeTextoD == ""){
-    while(Serial.available()> 0 && verificar){
-      if(Serial.available()> 0){
-        String texto = Serial.readString();
-        mensajeTextoD = mensajeTextoD + texto;
-        Serial.println(mensajeTextoD);
-        verificar = false;
+  if(Serial.available()){
+    String texto = Serial.readString();
+    mensajeTextoD = mensajeTextoD + texto;
+    Serial.println(mensajeTextoD);
+    //mensajeTextoD = "";
+  }
+  /*if(verificar){
+    while(Serial.available() && verificar){
+      
+      char character = Serial.read();
+      if (character != '\n')
+      {
+         mensajeTextoD = mensajeTextoD+ character;
+         
       }
-    }      
+      else
+      {
+         Serial.println(mensajeTextoD);
+         verificar=false;
+      }
+    } 
+    delay(200);     
   } 
   else{
     mensajeTextoDAPP();
-    } 
+    }
+    */
 }
 
 // funcion que cuenta tiempo de pulsacion
@@ -228,7 +246,7 @@ void contadorPulsacion() {
     interrupts();
 
     if (((float)auxContadorPulsos / 10) > 3) {
-        // Serial.println("Se pulso durante 3 segundos");
+        
         // modo letrero preciono 3 segundos cambio a
         if (estadoGeneral == 0) {
             estadoGeneral = 1;  // modo dinamico 
